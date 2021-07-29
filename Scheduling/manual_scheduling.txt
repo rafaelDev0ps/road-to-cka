@@ -1,0 +1,8 @@
+Scheduling
+
+Cada pod possui um campo chamado de nodeName, se ele nao tiver um nodeName ele sera escolhido para ser escalado
+e ficara em estado Pending ate receber um Node.
+
+Voce escala um pod colocando um nodeName para ele.
+
+O processo de escalar um Pod em um Node acontece atraves de um Biding.

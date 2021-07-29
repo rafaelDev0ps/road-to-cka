@@ -1,0 +1,13 @@
+Node Selectors
+
+Com NodeSelectors podemos aplicar labels nos Nodes e quando criamos um agente, sendo um Pod, Service, Replicaset, Deploy
+e entre outros, colocamos o campo nodeSelector aplicando o mesmo label do Node no agente.
+
+Com isso conseguimos predestinar em qual Node o agente será criado.
+
+> kubectl label nodes [nome_node] [label_key]=[label_value]
+
+*** EXEMPLO ***
+No template em YAML podemos colocar
+nodeSelector:
+  key:value

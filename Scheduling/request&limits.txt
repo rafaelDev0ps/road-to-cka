@@ -1,0 +1,25 @@
+Request & Limits
+
+O Scheduler decide o quanto o Pod precisa de recursos, seja memória, cpu ou disco.
+Caso o Pod não tenha recursos suficientes para ser executado ele permanece em estado Pending.
+
+- Requests: quantidade inicial de recursos
+- Limits: limite de recursos para o Pod, para que não sufoquem os recursos do Node
+
+Representação de CPU
+1 -> 1 AWS vCPU / 1 GCP Core / 1 Azure Core / 1 Hyperthread
+100m = 100 mili = 0.1 vCPU
+
+Representação de Memória
+1G (Gigabyte) = 1.000.000.000 bytes
+1M (Megabyte) = 1.000.000 bytes
+1K (Kilobyte) = 1.000 bytes
+
+1Gi (Gibibyte) = 1.073.741.824 bytes
+1Mi (Mebibyte) = 1.048.576 bytes
+1Ki (Kibibyte) = 1.024 bytes
+
+*** IMPORTANTE ***
+Caso o Pod exceda o consumo de CPU ou memória ele será Terminado.
+É possível estabelecer a maneira como os recursos são incrementados (0.5m em 0.5m de CPU por ex.). Para isso,
+é necessário criar um agente chamado LimitRange.

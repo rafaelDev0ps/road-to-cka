@@ -1,0 +1,20 @@
+Node Affinity
+
+Usando o Node Affinity podemos especificar com mais detalhes os criterios para colocar um agente em um Node.
+
+Quando declaramos uma Affinity existem duas propriedades principais os Tipos (Types) e Operadores (Operators).
+
+Tipos de Afinidade
+- requiredDuringSchedulingIgnoredDuringExecution
+- preferredDuringSchedulingIgnoredDuringExecution
+- requiredDuringSchedulingRequiredDuringExecution
+
+Tipos de Operadores
+- In
+- NotIn
+- Exists: nao precisa saber o valor do label, se ele existir a regra sera aplicada.
+- NotExists
+
+*** IMPORTANTE ***
+Existem dois momentos importantes durante o scheduling Duringscheduling e DuringExecution.
+O NODE AFFINITY DEVE SER COLOCADO DENTRO DAS SPECS DO POD

@@ -1,0 +1,6 @@
+Deamon Sets
+
+Funcionam como ReplicaSets, ajudam a fazer o deploy das instancias, porém é anezado apenas um DaemonSet no Node.
+Ele asegura que haverá sempre uma cópia do Pod no cluster.
+Um exemplo de daemonset é o kube-proxy, existem um em cada WorkerNode.
+

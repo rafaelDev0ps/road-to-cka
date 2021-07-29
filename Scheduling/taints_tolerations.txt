@@ -1,0 +1,19 @@
+Taints & Tolerations
+
+Servem para definir regras entre Pods e Nodes. Define quais Pods podem ser escalados nos Nodes.
+
+"Somente quero que Pods X sejam escalados nesse Node, os demais nao conseguirao"
+
+> kubectl taint nodes nome_node [key]=[valor]:[taint-effect]
+
+Taint Effects
+- NoSchedule: Pods nao serao escalados no Node
+- PreferNoSchedule: o sistema vai tentar NAO aplicar o Pod no Node
+- NoExecute: 
+
+*** EXEMPLOS ***
+Nao ira escalar Pods no Node node1 se o label "app" tiver o valor "teste".
+	> kubectl taint nodes node1 app=teste:NoSchedule
+
+*** IMPORTANTE ***
+Os Pods nao sao escalado no Master Node.

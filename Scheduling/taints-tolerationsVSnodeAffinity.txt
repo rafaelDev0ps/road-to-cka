@@ -1,0 +1,7 @@
+Taint & Tolerations VS NodeAffinity
+
+Taint & Tolerations não aseguram que o Pod irá sempre ser anexado no Node correto.
+Enquanto NodeAffinity asegura que determinado Pod irá ser anexado em determinado Node. Porém outros Pods
+ainda podem se anexar nesse determinado Node.
+
+Podemos usar Taints e NodeAffinity juntos!

@@ -1,0 +1,20 @@
+1- Aplicação prática
+  O tempo que eu apliquei as coisas que eu aprendi, sim ou não?
+
+2- Retenção
+  Você lembra o que vc estudou? De 0 a 10.
+
+3- Qualidade
+  Teve qualidade no estudo? De 0 a 10.
+
+4- Quantidade
+  A quantidade de tempo foi suficiente?
+
+5- Disponibilidade
+  O conteúdo está disponível?
+
+6- Tem relevancia com o PRESENTE?
+  Preciso disso agora? 
+
+7- Tem relevancia com o FUTURO?
+  Isso vai me ajudar no futuro?

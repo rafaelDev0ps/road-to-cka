@@ -1,0 +1,14 @@
+Static Pods
+
+O kubelet sabe criar Pods sem precisa do Master Node.
+O diretorio /etc/kubernetes/manifest armazena as configs dos pods.
+
+Dessa forma esses pods sao chamados de pods estaticos.
+Nao sao criados como replicasets ou daemontsets, sao apenas pods estaticos
+
+As configs para habilitar os pods estaticos estao nos arquivos kubelet.service e kubeconfig.yaml
+Os Pods estaticos sao ignorados pelo kube-scheduler. Entretanto sao listados junto com os demais tipos de pods.
+
+Para criar um pods estatico e necessario adicionar o arquivo YAML do pod no diretorio /etc/kubernetes/manifest.
+Caso o arquivo seja removido o Pod tambem sera removido.
+

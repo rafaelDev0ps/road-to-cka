@@ -1,0 +1,17 @@
+Labels & Selectors
+
+Serve para segregar agentes do Kubernetes a partir de um Label ou aplicar um Selector para ser visto de maneira
+diferente dos demais agentes presentes no cluster.
+
+Labels e Selectors podem ser aplicados em Pods, Services, Deployments, Replicasets, Nodes e etc.
+
+Labels sao adicionados dentro do campo metadata de cada arquivo de configuracao.
+
+Tambem existem as Annotations que servem para rotular os agentes e integrar os agentes a plugins do K8s.
+
+
+*** IMPORTANTE ***
+Vale lembrar que existe dois metadatas, o do Pod, e do Replicaset. Os labels precisam ser os mesmos para que o replicaset
+consiga enxergar os Pods atraves do campo matchLabels do Replicaset.
+
+A mesma coisa vale para Services aplicados aos Pods
