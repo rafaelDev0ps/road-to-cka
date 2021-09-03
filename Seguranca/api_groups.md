@@ -7,7 +7,13 @@ Existem dois principais API Groups que devem receber atencao:
 - `/named`: representa os demais agentes que possuem seus proprios verbos dentro do cluster (e.g. create, watch, approve, delete).  
 ![named_api_groups](./assets/named_api_groups.png)  
   
-Podemos descobrir os API Groups do cluster atraves de um port-forward com o seguinte comando:  
+Podemos descobrir os API Groups do cluster atraves das seguintes formas:  
+Com o kubectl:  
+```sh
+kubectl api-resources
+```
+
+Ou com um port-forward com o seguinte comando:  
 ```sh
 kubectl proxy
 ```
