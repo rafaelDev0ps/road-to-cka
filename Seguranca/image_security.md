@@ -32,6 +32,6 @@ spec:
   containers:
   - name: meu-app
     image: meu-server-de-imagens.io/usuario/meu-app
-imagePullSecrets:  # <=== AQUI
-- name: credenciais-registry  # <=== AQUI
+  imagePullSecrets:  # <=== AQUI
+  - name: credenciais-registry  # <=== AQUI
 ```  
