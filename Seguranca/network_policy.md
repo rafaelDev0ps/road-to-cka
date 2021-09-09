@@ -47,4 +47,7 @@ spec:
     - protocol: TCP
       port: 3306
 ```  
-Acima podemos ver que a NetworkPolicy ira buscar o backend pelo label atribuido a ele. Existem outras formas de buscar o Pod dentro do campo `from`, [aqui](https://kubernetes.io/pt-br/docs/concepts/services-networking/network-policies/#comportamento-dos-seletores-to-e-from) voce encontra mais formas de fazer isso.
+Acima podemos ver que a NetworkPolicy ira buscar o backend pelo label atribuido a ele. Existem outras formas de buscar o Pod dentro do campo `from`, [aqui](https://kubernetes.io/pt-br/docs/concepts/services-networking/network-policies/#comportamento-dos-seletores-to-e-from) voce encontra mais formas de fazer isso.  
+  
+### Importante
+Vale lembrar que no exemplo acima o Pod do DB nao ira conseguir realizar chamadas para o Pod da API, caso queira que isso acontece eh necessario definir a regra para `Egress`.
