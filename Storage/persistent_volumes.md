@@ -34,6 +34,25 @@ spec:
       storage: 10Gi
 ```  
   
+Para anexar um PVC a um Pod fazemos:  
+```yaml
+apiVersion: v1
+kind: Pod
+metadata:
+  name: nginx
+spec:
+  containers:
+  - name: nginx
+    image: nginx:alpine
+    volumeMounts:
+      - name: meu-storage
+        mountPath: /var/www/html
+  volumes:
+    - name: meu-storage
+      persistentVolumeClaim:
+        claimName: meu-pvc  # <== AQUI
+```
+
 **Dica!**  
 Imagine que um PVC serve como um ticket para o PV disponibilizar armazenamento para o Node!  
   
