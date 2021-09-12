@@ -4,6 +4,7 @@ Os conceitos basicos serao divididos em topicos.
 - [Routing](#routing)
 - [DNS](#dns)
 - [Dominios](#dominios)
+- [Network Namespaces](#network-namespaces)
   
 ## **Switching**  
 Quando falamos de switching temos o objetivos de comunicar um host com outro em uma rede. Para isso precisamos configurar o IP de ambos os hosts na interface de rede usada. Nesse caso vamos supor que estamos usando a rede por meio fisico (cabo).  
@@ -152,3 +153,123 @@ Existem outros tipos mas esses daqui sao os mais usados.
 Ferramentas para debugar um DNS:  
 - `nslookup`
 - `dig`
+  
+## Network Namespaces  
+Quando listamos os processos dentro de um cluster podemos ver que existem varias redes dentro dele atuando em diversos processos. Uma forma de organizar isso eh atraves de namespaces na rede.  
+  
+Dentro de um cluster podem ser executados diversos containeres, se entrarmos dentro de um container veremos que ha um processo principal que executa o que ha dentro do container, geralmente ele eh o processo root. Agora se listarmos os processos fora do container mas dentro do cluster veremos que esse processo possui outro PID!  
+  
+Quando criamos um container, por padrao ele nao consegue enxergar outras redes externas do cluster. Portanto, junto dele eh criado um interface propria para que consiga se comunicar com outros hosts, havera uma Routing Table e uma ARP Table. 
+  
+**_Como criar um Network Namespace?_**  
+No Linux podemos criar um Network Namespace da seguinte forma:  
+```sh
+$ ip netns add meu-namespace
+```  
+Agora precisamos anexar esse namespace `meu-namespace` criado em uma interface ja existente do host.  
+```sh
+$ ip -n meu-namespace link
+```  
+A flag `-n` significa namespace e recebe como argumento o nome do namespace criado.  
+Agora podemos ver que o namespace possui uma _Route Table_ e uma _ARP Table_.  
+```sh
+$ arp
+$ route
+```  
+Se entrarmos dentro do container para listar as tabelas devemos executar:  
+```sh
+$ ip netns exec meu-namespace arp
+$ ip netns exec meu-namespace route
+```  
+  
+Ate entao, esse namespace nao consegue se conectar com nenhum outro. Para isso precisamo criar as conexoes para que os namespaces consigam se enxergar.  
+Iremos criar "interfaces virtuais" como se fossem cabos que conectam os namespaces.  
+```sh
+$ ip link add veth1 type veth peer name veth2
+```  
+No comando acima estamos linkando as interfaces de dois namespaces diferentes. Veja que o `type` tem o valor `veth` que significa uma interface de rede virtual ethernet (fisica). Linkamos a interface de um namespace (`veth1`) com a interface de outro namespace (`veth2`).  
+  
+Depois que linkamos essas duas interfaces devemos anexar elas em cada namespace.  
+```sh
+$ ip link set veth1 netns meu-namespace
+$ ip link set veth2 netns meu-namespace2
+```    
+  
+Com as interfaces criadas precisamos anexar os IPs nelas para que os hosts consigam se comunicar.  
+```sh
+$ ip -n meu-namespace addr add 192.168.6.10 dev veth1
+$ ip -n meu-namespace2 addr add 192.168.6.11 dev veth2
+```  
+Eh como se estivessemos anexando em uma interface qualquer, porem na realidade estamos usando uma interface virtual.  
+  
+Por fim habilitamos as interfaces para poderem ser usadas.  
+```sh
+$ ip -n meu-namespace link set veth1 up
+$ ip -n meu-namespace2 link set veth2 up
+```  
+  
+Legal, conseguimos fazer com que dois namespaces se comuniquem. Mas se tiver varios namespaces anexados na interface, teremos que linka-los um por um? Nao.  
+  
+Como no meio fisico, podemos anexar cada host em um switch e dessa forma eles irao poder se comunicar. Como estamos no meio virtual precisamos criar um switch virtual para que mais namespaces consigam se comunicar.  
+  
+Para criar um switch virtual iremos usar o **Linux Bridge**. Fazemos isso usando o comando `ip` tambem.  
+```sh
+$ ip link add minha-vnet type bridge
+$ ip link set dev minha-vnet up
+```  
+Dessa forma criamos uma rede virtual `minha-vnet` para que seja possivel conectar os namespaces nela.  
+Ja que iremos usar o nosso switch virtual para conectar com os outros namespaces podemos deletar o link feito anteriormente.  
+```sh
+$ ip -n meu-namespace link del veth1
+```  
+Quando deletamos o link de um namespace o outro link eh deletado automaticamente.  
+Agora sim, vamos criar os "cabos" que conectam com nosso switch virtual.  
+```sh
+$ ip link add veth1 type peer name veth1-peer
+$ ip link add veth2 type peer name veth2-peer
+```  
+  
+Vamos anexar nossas interfaces virtuais `veth1` e `veth2` nos respectivos namespaces.  
+```sh
+$ ip link set veth1 netns meu-namespace
+$ ip link set veth2 netns meu-namespace2
+```  
+E "plugar" os "cabos" `veth1-peer` e `veth2-peer` no switch virtual.  
+```sh
+$ ip link set veth1-peer master minha-vnet
+$ ip link set veth2-peer master minha-vnet
+```  
+E atribuimos novamente os IPs para as interfaces virtuais `veth1` e `veth2` criadas.  
+```sh
+$ ip -n meu-namespace addr add 192.168.6.10 dev veth1
+$ ip -n meu-namespace2 addr add 192.168.6.11 dev veth2
+```
+  
+Habilitamos as interfaces para poderem ser usadas.  
+```sh
+$ ip -n meu-namespace link set veth1 up
+$ ip -n meu-namespace2 link set veth2 up
+```  
+  
+Atribuimos um endereco de rede para o switch virtual.  
+```sh
+$ ip addr add 192.168.6.3/24 dev minha-vnet
+```  
+  
+**FINALMENTE, agora nossos hosts conseguem se comunicar pelo switch virtual e nao teremos mais um problema de escala.**  
+  
+Porem, eles nao conseguem acessar uma rede externa.  
+Isso acontece por que a Routing Table de cada namespace criado desconhece qualquer rede externa e para que consiga com o mundo externo eh necessario adicionar uma rede no Route Table.  
+  
+Para isso precisamos de um gateway que tenha conexao com redes externas para que seja possivel fazer uma ponte ate ele. Que nesse caso eh o nosso switch virtual.
+```sh
+$ ip netns exec meu-namespace ip route add 192.168.1.0/24 via 192.168.6.3
+```  
+No comando acima estamos adicionando o IP da rede externa `192.168.1.0/24` no Route Table do namespace `meu-namespace` dizendo que a conexao sera atraves do switch virtual com IP `192.168.6.3`  
+  
+Ate aqui conseguimos alcancar os hosts externos porem nao obtemos resposta deles. Eles nao conhecem o endereco de origem.  
+  
+Para isso precisamos habilitar um NAT no nosso host que funciona como um Gateway para os hosts externos. Para isso usamos o `iptables`.  
+```sh
+$ iptables -t nat -A POSTROUTING -s 192.168.6.0/24 -j MASQUERADE
+```
