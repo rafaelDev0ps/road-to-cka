@@ -10,6 +10,6 @@ Repositorio conteúdo estudado para o exame CKA.
 1. 🛠️ [Manutencao](https://github.com/rafaelDev0ps/road-to-cka/tree/main/Manutencao)
 1. 🔐 [Seguranca](https://github.com/rafaelDev0ps/road-to-cka/tree/main/Seguranca)
 1. 💾 [Storage](https://github.com/rafaelDev0ps/road-to-cka/tree/main/Storage)  
-  
+1. 🌐 [Network](https://github.com/rafaelDev0ps/road-to-cka/tree/main/Networking) 
 
 🧑‍💻 work in progress...
