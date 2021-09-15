@@ -50,3 +50,6 @@ Quando os Pods sao criados o `kubelet` configura o endereco do Kube-DNS para que
   
 **OBSERVACAO**  
 Caso um Pod tente acessar outro Pod, eh necessario chamar pelo nome do registro completo. Apenas para os Services as configuracoes de apelidos sao feitas. Portanto deve-se usar `namespace.pod.cluster.local` ao chamar um Pod atraves de um outro Pod.  
+  
+### **DICA**
+Importante saber usar ferramentas como `nslookup` e `dig` para debuggar problemas em resolucao de nomes na rede.  
