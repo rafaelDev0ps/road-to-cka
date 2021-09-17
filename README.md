@@ -12,5 +12,6 @@ Partes em progresso/faltantes: Conceitos base (formatacao)
 1. 🔐 [Seguranca](https://github.com/rafaelDev0ps/road-to-cka/tree/main/Seguranca)
 1. 💾 [Storage](https://github.com/rafaelDev0ps/road-to-cka/tree/main/Storage)  
 1. 🌐 [Network](https://github.com/rafaelDev0ps/road-to-cka/tree/main/Networking) 
+1. 🌐 [Troubleshooting](https://github.com/rafaelDev0ps/road-to-cka/tree/main/Troubleshooting) 
 
 🧑‍💻 work in progress...
