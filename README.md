@@ -1,8 +1,8 @@
 # Road to CKA
 Repositorio conteúdo estudado para o exame CKA.  
   
-Partes em progresso/faltantes: Conceitos base (formatacao), Throubleshooting
-
+Partes em progresso/faltantes: Conceitos base (formatacao)
+  
 ## Indice
 1. ⛰️ [Conceitos base](https://github.com/rafaelDev0ps/road-to-cka/tree/main/Core%20Concepts)
 1. ⏲️ [Scheduling](https://github.com/rafaelDev0ps/road-to-cka/tree/main/Scheduling)
