@@ -11,3 +11,5 @@ Caso nao encontre o erro, veja mais na documentacao de [Troubleshooting Clusters
   
 **OBSERVACAO**
 Para ver o status de um daemon use `service nome-service status`. Por exemplo, `service kubelet status`.  
+  
+***Vale lembrar que os Pods do Controlplane que ficam no namespace `kube-system` sao Pods estaticos que sao configurados em `/etc/kubernetes/manifests/`*
