@@ -1,5 +1,5 @@
-# Falhas nas aplicacaoes
-O que fazer quando as aplciacoes instaladas no cluster falham?
+# Falhas nas aplicacoes
+O que fazer quando as aplicacoes instaladas no cluster falham?
   
 Services
 - Checar eventos (describe)
